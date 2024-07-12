@@ -1,5 +1,5 @@
 require "rails_helper"
-
+#child
 RSpec.describe Pet, type: :model do
   describe "relationships" do
     it { should belong_to(:shelter) }

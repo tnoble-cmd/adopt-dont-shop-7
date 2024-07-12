@@ -1,5 +1,5 @@
 require "rails_helper"
-
+#parent
 RSpec.describe Shelter, type: :model do
   describe "relationships" do
     it { should have_many(:pets) }
