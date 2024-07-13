@@ -1,0 +1,18 @@
+<h1>Adoption Applications</h1>
+
+<h2>Application Status: <%= @application.status %></h2>
+<div>
+    <h2> Application Details </h2>
+            <p> Name: <%= @application.applicant_name %></p>
+            <p> Address: <%= @application.full_address %></p>   
+            <p> Description: <%= @application.description %></p>  
+</div>
+
+<div>
+    <h2> Desired Pets</h2>
+        <% @pets.each do |pet| %>
+            <p> Click to view: <%= link_to pet.name, "/pets/#{pet.id}"%></p>
+        <% end %>
+</div>
+
+
