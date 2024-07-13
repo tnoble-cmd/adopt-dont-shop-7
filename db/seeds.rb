@@ -5,3 +5,32 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+
+
+
+PetApplication.destroy_all
+Application.destroy_all
+Pet.destroy_all
+Shelter.destroy_all
+
+
+application_1 = Application.create!(name: "Tyler Noble", address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.", status: "In Progress")
+application_2 = Application.create!(name: "Lito Croy", address: "456 Elm St", city: "Albuquerque", state: "NM", zip: "87108", description: "Me like dogs mucho.", status: "Pending")
+
+pet_1 = shelter_1.pets.create!(name: "Bicho", breed: "Shug", age: 2, adoptable: true)
+pet_2 = shelter_1.pets.create!(name: "Appa", breed: "Catdog", age: 7, adoptable: true)
+pet_3 = shelter_2.pets.create!(name: "Qira", breed: "German Shephard", age: 2, adoptable: true)
+pet_4 = shelter_2.pets.create!(name: "Auzzie", breed: "Shitzu", age: 4, adoptable: false)
+
+shelter_1 = Shelter.create!(foster_program: true, name: "Get Me Outta Here Pet Shelter", city: "Denver", rank: 7)
+shelter_2 = Shelter.create!(foster_program: false, name: "Glue Factory Adoption Center", city: "Boulder", rank: 13)
+
+PetApplication.create!(pet: pet_1, application: application_1)
+PetApplication.create!(pet: pet_2, application: application_1)
+PetApplication.create!(pet: pet_2, application: application_2)
+PetApplication.create!(pet: pet_3, application: application_1)
+PetApplication.create!(pet: pet_3, application: application_2)
+PetApplication.create!(pet: pet_4, application: application_2)
+
+puts "Seed successful"
