@@ -16,7 +16,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_12_004753) do
 
   create_table "applications", force: :cascade do |t|
     t.string "applicant_name"
-    t.string "full_address"
+    t.string "street_address"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
     t.string "description"
     t.string "status"
     t.datetime "created_at", null: false
