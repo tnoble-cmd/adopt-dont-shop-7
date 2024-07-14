@@ -12,6 +12,9 @@ class ApplicationsController < ApplicationController
 
     if @application.save
       redirect_to "/applications/#{Application.last.id}"
+    else
+    redirect_to "/applications/new"
+    flash[:error] = @application.errors.full_messages.join(", ")
     end
   end
 

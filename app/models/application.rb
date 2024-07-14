@@ -2,12 +2,15 @@ class Application < ApplicationRecord
   has_many :pet_applications
   has_many :pets, through: :pet_applications
 
+  validates :applicant_name, presence: true
+  validates :street_address, presence: true
+  validates :city, presence: true
+  validates :state, presence: true
+  validates :zip, presence: true, numericality: true
+  validates :description, presence: true
+
   def full_address
     "#{street_address}, #{city}, #{state} #{zip}"
-  end
-
-  def pets_selected
-    pet_applications.where("application_id = application.id")
   end
 end
 

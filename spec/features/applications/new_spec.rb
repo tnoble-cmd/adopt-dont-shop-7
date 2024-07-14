@@ -17,6 +17,7 @@
 # And I see my Name, address information, and description of why I would make a good home
 # And I see an indicator that this application is "In Progress"
 
+
 require "rails_helper"
 
 RSpec.describe "User Story 2 - Starting an Application", type: :feature do 
@@ -31,7 +32,7 @@ RSpec.describe "User Story 2 - Starting an Application", type: :feature do
       @pet_4 = @shelter_2.pets.create!(name: "Auzzie", breed: "Shitzu", age: 4, adoptable: false)
     end
 
-
+    # Should I denote this section with a `describe "User Story #2" do`?
     it "shows a link to 'Start an Application" do
       visit "/pets"
       expect(page).to have_link("Start an Application", href: "/applications/new")
@@ -56,34 +57,62 @@ RSpec.describe "User Story 2 - Starting an Application", type: :feature do
     end
     
     describe "applicant submission process" do 
-      it "has a 'Submit' button that saves the form info and redirects me to the new application show page" do 
-        visit "/applications/new"
+      describe "successful submission" do
+        it "has a 'Submit' button that saves the form info and redirects me to the new application show page" do 
+          visit "/applications/new"
 
-        expect(page).to have_button("Submit")
-        
-        fill_in :applicant_name, with: "Lito"
-        fill_in :street_address, with: "1234 Main St."
-        fill_in :city, with: "Denver"
-        fill_in :state, with: "CO"
-        fill_in :zip, with: "80202"
-        fill_in :description, with: "I am a good dog man, yes?"
+          expect(page).to have_button("Submit")
+          
+          fill_in :applicant_name, with: "Lito"
+          fill_in :street_address, with: "1234 Main St."
+          fill_in :city, with: "Denver"
+          fill_in :state, with: "CO"
+          fill_in :zip, with: "80202"
+          fill_in :description, with: "I am a good dog man, yes?"
 
-        click_button "Submit"
-        
-        application = Application.last
+          click_button "Submit"
+          
+          application = Application.last
 
-        #show page
-        expect(page).to have_current_path("/applications/#{application.id}")
+          #show page
+          expect(page).to have_current_path("/applications/#{application.id}")
 
-        expect(page).to have_content("Lito")
-        expect(page).to have_content("1234 Main St.")
-        expect(page).to have_content("Denver")
-        expect(page).to have_content("CO")
-        expect(page).to have_content("80202")
-        expect(page).to have_content("I am a good dog man, yes?")
+          expect(page).to have_content("Lito")
+          expect(page).to have_content("1234 Main St.")
+          expect(page).to have_content("Denver")
+          expect(page).to have_content("CO")
+          expect(page).to have_content("80202")
+          expect(page).to have_content("I am a good dog man, yes?")
+          expect(page).to have_content("Status: In Progress")
+        end
+      end
 
-        expect(page).to have_content("Status: In Progress")
+      # User Story #3
+      # Can I have this here instead of making a new spec file?
+      # I'd like to piggyback off of the existing test setup already present (`have_field`, etc.)
+      describe "unsuccessful submission" do 
+        it "displays error messages when form fields are not filled out correctly" do
+          visit "/applications/new"
+  
+          fill_in :applicant_name, with: ""
+          fill_in :street_address, with: ""
+          fill_in :city, with: ""
+          fill_in :state, with: ""
+          fill_in :zip, with: ""
+          fill_in :description, with: ""
+  
+          click_button "Submit"
+  
+          expect(page).to have_current_path("/applications/new")
+          expect(page).to have_content("Applicant name can't be blank")
+          expect(page).to have_content("Street address can't be blank")
+          expect(page).to have_content("City can't be blank")
+          expect(page).to have_content("State can't be blank")
+          expect(page).to have_content("Zip can't be blank")
+          expect(page).to have_content("Description can't be blank")
+        end
       end
     end
   end
 end
+
