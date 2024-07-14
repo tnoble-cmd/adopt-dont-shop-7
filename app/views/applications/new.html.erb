@@ -1,0 +1,31 @@
+<h1>Fill out an Adoption Application</h1>
+
+<%= form_with model: @application, local: true do |form|%> 
+    <div>
+        <%= form.label :applicant_name %>
+        <p><%= form.text_field :applicant_name %></p>
+    </div>
+    <div>
+        <%= form.label :street_address %>
+        <p><%= form.text_field :street_address %></p>
+    </div>
+    <div>
+        <%= form.label :city %>
+        <p><%= form.text_field :city %></p>
+    </div>
+    <div>
+        <%= form.label :state %>
+        <p><%= form.text_field :state %></p>
+    </div>
+    <div>
+        <%= form.label :zip %>
+        <p><%= form.text_field :zip %></p>
+    </div>
+    <div>
+        <%= form.label :description %>
+        <p><%= form.text_area :description %></p>
+    </div>
+    <div>
+        <%= form.submit "Submit" %>
+    </div>
+<% end %>
