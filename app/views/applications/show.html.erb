@@ -10,11 +10,11 @@
 
 <div>
     <h2> Add a Pet to this Application </h2>
-    <%= form_with url: "/applications/#{@application.id}", method: :get, local: true do%>
+    <%= form_with url: "/applications/#{@application.id}", method: :get, local: true do |form|%>
         <div>
-                <%= label_tag :name, "Search" %>
-                <%= text_field_tag :name, params[:name] %>
-                <%= submit_tag "Submit"%>
+            <%= form.label :name, "Search"%>
+            <%= form.text_field :name %>
+            <%= form.submit "Submit"%>
         </div>
     <% end %>
 </div>

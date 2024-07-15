@@ -15,8 +15,8 @@ Pet.destroy_all
 Shelter.destroy_all
 
 
-application_1 = Application.create!(name: "Tyler Noble", address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.", status: "In Progress")
-application_2 = Application.create!(name: "Lito Croy", address: "456 Elm St", city: "Albuquerque", state: "NM", zip: "87108", description: "Me like dogs mucho.", status: "Pending")
+application_1 = Application.create!(applicant_name: "Tyler Noble", street_address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.")
+application_2 = Application.create!(applicant_name: "Lito Croy", street_address: "456 Elm St", city: "Albuquerque", state: "NM", zip: "87108", description: "Me like dogs mucho.")
 
 pet_1 = shelter_1.pets.create!(name: "Bicho", breed: "Shug", age: 2, adoptable: true)
 pet_2 = shelter_1.pets.create!(name: "Appa", breed: "Catdog", age: 7, adoptable: true)

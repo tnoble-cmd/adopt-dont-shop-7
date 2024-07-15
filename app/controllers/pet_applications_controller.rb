@@ -1,14 +1,9 @@
 class PetApplicationsController < ApplicationController
-  # def show
-  #   #can search a pet from the application's show page (case insensitive)
-  #   @application = Application.find(params[:id])
-  #   @search = Pet.where("name ILIKE ?", "%#{params[:name]}%")
-  # end
 
   def create
     @application = Application.find(params[:application_id])
     @pet = Pet.find(params[:pet_id])
-    @application.pets << @pet
+    PetApplication.create(application_id: @application, pet_id: @pet)
     redirect_to "/applications/#{params[:application_id]}"
   end
 

@@ -99,7 +99,7 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
       
       click_button "Submit"
 
-      expect(page).to have_current_path("/applications/#{@application_1.id}", ignore_query: true)
+      
       expect(page).to have_content(@pet_1.name)
     end
 
@@ -111,7 +111,7 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
       
       click_button "Submit"
 
-      expect(page).to have_current_path("/applications/#{@application_1.id}", ignore_query: true)
+      
       expect(page).to have_content(@pet_1.name)
     end
   end

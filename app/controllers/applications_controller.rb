@@ -10,6 +10,7 @@ class ApplicationsController < ApplicationController
   def create
     @application = Application.new(application_params)
 
+    # save means validations were met
     if @application.save
       redirect_to "/applications/#{Application.last.id}"
     else
