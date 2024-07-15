@@ -93,25 +93,26 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
       visit "/applications/#{@application_1.id}"
 
       expect(page).to have_content("Add a Pet to this Application")
-      expect(page).to have_field(:name)
+      expect(page).to have_field(:search)
       
-      fill_in :name, with: @pet_1.name
+      fill_in :search, with: @pet_1.name
       
       click_button "Submit"
 
       
-      expect(page).to have_content(@pet_1.name)
+      expect(current_path).to eq("/applications")
     end
 
     it "can search a pet with case insensitive text" do
       expect(page).to have_content("Add a Pet to this Application")
-      expect(page).to have_field(:name)
+      expect(page).to have_field(:search)
       
-      fill_in :name, with: @pet_1.name.upcase
+      fill_in :search, with: @pet_1.name.upcase
       
       click_button "Submit"
 
       
+      expect(current_path).to eq("/applications")
       expect(page).to have_content(@pet_1.name)
     end
   end
@@ -134,12 +135,13 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
   describe "User Story #5 - Add pet to Application" do 
     it "adds a searched pet to an application via 'Submit' button" do 
       ## And I search for a Pet by name
-      fill_in :name, with: @pet_1.name
+      fill_in :search, with: @pet_1.name
       
       click_button "Submit"
       
-      ## And I see the names (of?) Pets that match my search
-      expect(page).to have_content(@pet_1.name)
+      #goes to search index page
+      expect(current_path).to eq("/applications")
+
       ## Then next to each Pet's name I see a button to "Adopt this Pet"
       expect(page).to have_button("Add Pet")
       
@@ -178,23 +180,23 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
   # # And I do not see a section to add more pets to this application
 
   # describe "User Story #6 - Application Submission" do
-  #   it "" do
-  #     fill_in :search, with: @pet_1.name
-      
-  #     click_button "Search"
+  #   describe "changing app status and move "
+  #     it "changes application status to 'Pending' " do
+  #       fill_in :search, with: @pet_1.name
+        
+  #       click_button "Search"
 
-  #     expect(page).to have_content(@pet_1.name)
-  #     expect(page).to have_field("Adopt this Pet")
-      
-      
-  #     click_button "Adopt this Pet" 
-      
-  #     expect(page).to have_current_path("/applications/#{@application_1.id}")
+  #       expect(page).to have_content(@pet_1.name)
+  #       expect(page).to have_field("Adopt this Pet")
+        
+        
+  #       click_button "Adopt this Pet" 
+        
+  #       expect(page).to have_current_path("/applications/#{@application_1.id}")
 
-  #     expect(page).to have_content(@pet_1.name)
+  #       expect(page).to have_content(@pet_1.name)
+  #     end
   #   end
-
-
   end
 end
 

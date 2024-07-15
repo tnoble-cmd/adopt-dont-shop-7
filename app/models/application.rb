@@ -1,7 +1,8 @@
 class Application < ApplicationRecord
   has_many :pet_applications
   has_many :pets, through: :pet_applications
-
+  
+  #Callback - will set status to "In Progress" if not set when User creates new application(saved)
   before_save :set_default_status
 
   validates :applicant_name, presence: true
