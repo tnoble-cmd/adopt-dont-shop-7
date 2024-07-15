@@ -1,0 +1,41 @@
+<h1>Adoption Applications</h1>
+
+<h2>Application Status: <%= @application.status %></h2>
+<div>
+    <h2> Application Details </h2>
+            <p> Name: <%= @application.applicant_name %></p>
+            <p> Address: <%= @application.full_address %></p>   
+            <p> Description: <%= @application.description %></p>  
+</div>
+
+<div>
+    <h2> Add a Pet to this Application </h2>
+    <%= form_with url: "/applications/#{@application.id}", method: :get, local: true do%>
+        <div>
+                <%= label_tag :name, "Search" %>
+                <%= text_field_tag :name, params[:name] %>
+                <%= submit_tag "Submit"%>
+        </div>
+    <% end %>
+</div>
+
+<div>
+    <h2>results</h2>
+    <%= @pets.each do |pet| %>
+        <p>pet.name</p>
+        <%= form_with url: "/pet_applications/add_pet", method: :post, local: true do%>
+            <%= hidden_field_tag :application_id, @application.id %>
+            <%= hidden_field_tag :pet_id, pet.id %>
+            <%= submit_tag "Add Pet" %>
+        <% end %>
+    <% end %>
+</div>
+
+<div>
+    <h2> Desired Pets</h2>
+        <% @application.pets.each do |pet| %>
+            <p> Click to view: <%= link_to pet.name, "/pets/#{pet.id}"%></p>
+        <% end %>
+</div>
+
+
