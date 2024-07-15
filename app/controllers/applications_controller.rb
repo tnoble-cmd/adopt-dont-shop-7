@@ -9,7 +9,7 @@ class ApplicationsController < ApplicationController
 
   def create
     @application = Application.new(application_params)
-
+    @application.set_default_status
     # save means validations were met
     if @application.save
       redirect_to "/applications/#{Application.last.id}"
@@ -28,6 +28,6 @@ class ApplicationsController < ApplicationController
       :state,
       :zip,
       :description
-    ).merge(status: "In Progress")
+    )
   end
 end
