@@ -1,11 +1,11 @@
-# 3. Starting an Application, Form not Completed
+# 5. Add a Pet to an Application
 
 # As a visitor
-# When I visit the new application page
-# And I fail to fill in any of the form fields
-# And I click submit
-# Then I am taken back to the new applications page
-# And I see a message that I must fill in those fields.
-
-# ADD VALIDATIONS TO APPLICATIONS module:
+# When I visit an application's show page
+# And I search for a Pet by name
+# And I see the names Pets that match my search
+# Then next to each Pet's name I see a button to "Adopt this Pet"
+# When I click one of these buttons
+# Then I am taken back to the application show page
+# And I see the Pet I want to adopt listed on this application
 
