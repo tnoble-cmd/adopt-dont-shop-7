@@ -62,12 +62,14 @@ RSpec.describe Application, type: :model do
       expect(application.errors.full_messages).to include("Description can't be blank")
     end
     
-    it "creates all new applications with a status of 'In Progress'" do
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "fdsaf")
-      application.save
+### IS THIS TEST BELOW NEEDED IF I HAVE THE ONES STARTING ON LINE 85?
+
+    # it "creates all new applications with a status of 'In Progress'" do
+    #   application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "fdsaf")
+    #   application.save
       
-      expect(application.status).to eq("In Progress")
-    end
+    #   expect(application.status).to eq("In Progress")
+    # end
 
   end
   
@@ -76,6 +78,28 @@ RSpec.describe Application, type: :model do
       application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "description lol")
       
       expect(application.full_address).to eq("1234 Main St., Denver, NM 80303")
+    end
+  end
+
+  # TESTS PASS!
+  describe "changing application status" do
+    it "creates new application with a status of 'In Progress' as default" do
+      application = Application.create!(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "CO", zip: "80303", description: "I is the goodest.")
+
+      application.set_default_status
+      expect(application.status).to eq("In Progress")
+    end
+
+    it "updates application status to 'Pending' upon adding pets & clicking button 'Submit Application' " do
+      application = Application.create!(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "CO", zip: "80303", description: "I is the goodest.")
+
+      application.set_default_status
+
+      expect(application.status).to eq("In Progress")
+
+      application.set_status_pending
+
+      expect(application.status).to eq("Pending")
     end
   end
 end

@@ -1,6 +1,5 @@
 <h1>Results</h1>
 
-    <h2>results</h2>
     <% @pets.each do |pet| %>
         <p><%=pet.name%></p>
         <%= form_with url: "/pet_applications/add_pet", method: :post, local: true do%>

@@ -20,7 +20,7 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
     @shelter_1 = Shelter.create!(name: "Get Me Outta Here", foster_program: true, city: "Denver", rank: 12)
     @shelter_2 = Shelter.create!(name: "Glue Factory Adoption Center", foster_program: true, city: "Boulder", rank: 2)
     
-    # Pets created via shelters because a pet belongs_to a shelter
+    # # Pets created via shelters because a pet belongs_to a shelter
     @pet_1 = @shelter_1.pets.create!(name: "Bicho", breed: "Shug", age: 2, adoptable: true)
     @pet_2 = @shelter_1.pets.create!(name: "Appa", breed: "Catdog", age: 7, adoptable: true)
     @pet_3 = @shelter_2.pets.create!(name: "Qira", breed: "German Shephard", age: 2, adoptable: true)
@@ -105,6 +105,7 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
       expect(current_path).to eq("/applications")
     end
 
+    # PRETTY SURE WE'LL MOVE THIS TEST DOWN AS IT SATISFIES A LATER USER STORY
     it "can search a pet with case insensitive text" do
       expect(page).to have_content("Add a Pet to this Application")
       expect(page).to have_field(:search)
@@ -178,26 +179,60 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
   # And I see all the pets that I want to adopt
   # And I do not see a section to add more pets to this application
 
+
+### HOW IS THE TEST ENTERING THE USER'S INFORMATION?
+### save_and_open_page DISPLAYS 4 SELECTED PETS [Bicho, Bicho, Appa, Qira]
+### Bicho selected twice somewhere
+### Not following test setup provided in `it` block
+### Data generating elsewhere
   describe "User Story #6 - Application Submission" do
     it "shows a section to submit my application with 1 or more pet" do 
+      application_3 = Application.create!(applicant_name: "Tyler Noble", street_address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.", status: "In Progress")
+
+      shelter_1 = Shelter.create!(name: "Get Me Outta Here", foster_program: true, city: "Denver", rank: 12)
+      shelter_2 = Shelter.create!(name: "Glue Factory Adoption Center", foster_program: true, city: "Boulder", rank: 2)
+      
+      # # Pets created via shelters because a pet belongs_to a shelter
+      pet_5 = shelter_1.pets.create!(name: "Bicho", breed: "Shug", age: 2, adoptable: true)
+      pet_6 = shelter_1.pets.create!(name: "Appa", breed: "Catdog", age: 7, adoptable: true)
+      pet_7 = shelter_2.pets.create!(name: "Qira", breed: "German Shephard", age: 2, adoptable: true)
+      pet_8 = shelter_2.pets.create!(name: "Auzzie", breed: "Shitzu", age: 4, adoptable: false)
   
-      fill_in :search, with: @pet_1.name
-      click_button "Search" # Do we need to rename this button `Search`?  We might have two named 'Submit'.
+      fill_in :search, with: pet_7.name
+      click_button "Submit"
       first(:button, "Add Pet").click
 
       expect(page).to have_field(:description)
-      expect(page).to have_button("Submit")
+      expect(page).to have_button("Submit Application")
 
-      fill_in :description, with: "I love dogs."
+      fill_in :description, with: "I love dogs."  # NOT WORKING
       
-      expect(page).to have_current_path("/applications/#{@application_1.id}")
-      redirect_to "/applications/#{@application_1.id}"
+      expect(page).to have_current_path("/applications/#{application_3.id}")
+      visit "/applications/#{application_3.id}"
+      save_and_open_page
+      # binding.pry
 
-      expect(@application_1.status).to eq("Pending")
-      expect(page).to have_content(@pet_1.name)
+      expect(application.status).to eq("Pending") # Status not updating in test
+      expect(page).to have_content(pet_7.name)
       expect(page).to_not have_button("Add Pet")
     end
   end
+
+  # describe "User Story #7 - No Pets on an Application" do 
+  #   it "reveals the update `Description` field until 1+ pets added to application" do
+  #     expect(page).to_not have_content("Desired Pets")
+  #     expect(page).to_not have_content("Desired Pets")
+  #     expect(page).to have_content(@application_1.)
+
+  #     expect(page).to_not have_button("Submit Application")
+
+
+
+  #     expect(page).to have_button("Submit Application")
+
+
+  #   end
+  # end
 end
 
 
