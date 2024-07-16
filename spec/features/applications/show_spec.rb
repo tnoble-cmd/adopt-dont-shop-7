@@ -29,6 +29,8 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
     
     # We definitely need these for the 3rd `it` block test, right?
     # This is our JOINED table that includes records showing multiple Pet AND Application objects `have_many` PetApplications
+    
+    # Did we create these pet_application objects correctly or were we supposed to use pet_id and application_id like we do in the PetApplicationsController?
     PetApplication.create!(pet: @pet_1, application: @application_1)
     PetApplication.create!(pet: @pet_2, application: @application_1)
     PetApplication.create!(pet: @pet_3, application: @application_1)
@@ -93,25 +95,26 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
       visit "/applications/#{@application_1.id}"
 
       expect(page).to have_content("Add a Pet to this Application")
-      expect(page).to have_field(:name)
+      expect(page).to have_field(:search)
       
-      fill_in :name, with: @pet_1.name
+      fill_in :search, with: @pet_1.name
       
       click_button "Submit"
 
       
-      expect(page).to have_content(@pet_1.name)
+      expect(current_path).to eq("/applications")
     end
 
     it "can search a pet with case insensitive text" do
       expect(page).to have_content("Add a Pet to this Application")
-      expect(page).to have_field(:name)
+      expect(page).to have_field(:search)
       
-      fill_in :name, with: @pet_1.name.upcase
+      fill_in :search, with: @pet_1.name.upcase
       
       click_button "Submit"
 
       
+      expect(current_path).to eq("/applications")
       expect(page).to have_content(@pet_1.name)
     end
   end
@@ -134,12 +137,13 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
   describe "User Story #5 - Add pet to Application" do 
     it "adds a searched pet to an application via 'Submit' button" do 
       ## And I search for a Pet by name
-      fill_in :name, with: @pet_1.name
+      fill_in :search, with: @pet_1.name
       
       click_button "Submit"
       
-      ## And I see the names (of?) Pets that match my search
-      expect(page).to have_content(@pet_1.name)
+      #goes to search index page
+      expect(current_path).to eq("/applications")
+
       ## Then next to each Pet's name I see a button to "Adopt this Pet"
       expect(page).to have_button("Add Pet")
       
@@ -157,44 +161,42 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
       end
       
     end
-  # end
+  end
 
   # # 6. Submit an Application
 
-  # # As a visitor
-  # # When I visit an application's show page
-  # # And I have added one or more pets to the application
-  # # Then I see a section to submit my application
-  #   # Is this suggesting we move the `Description` section to show up AFTER the user selects
-  #   # their desired pets?
-  # # And in that section I see an input to enter why I would make a good owner for these pet(s)
+  # As a visitor
+  # When I visit an application's show page
+  # And I have added one or more pets to the application
+  # Then I see a section to submit my application
+  # And in that section I see an input to enter why I would make a good owner for these pet(s)
+  # When I fill in that input (Description section)
+  # And I click a button to submit this application
+  
+  # Then I am taken back to the application's show page
+  # And I see an indicator that the application is "Pending"
+  # And I see all the pets that I want to adopt
+  # And I do not see a section to add more pets to this application
 
-  # # When I fill in that input (Description section)
-  # # And I click a button to submit this application
-  # # Then I am taken back to the application's show page
-  # # And I see an indicator that the application is "Pending"
-  #   # Change status from "In Progress" to "Pending"
-  # # And I see all the pets that I want to adopt
-  # # And I do not see a section to add more pets to this application
+  describe "User Story #6 - Application Submission" do
+    it "shows a section to submit my application with 1 or more pet" do 
+  
+      fill_in :search, with: @pet_1.name
+      click_button "Search" # Do we need to rename this button `Search`?  We might have two named 'Submit'.
+      first(:button, "Add Pet").click
 
-  # describe "User Story #6 - Application Submission" do
-  #   it "" do
-  #     fill_in :search, with: @pet_1.name
+      expect(page).to have_field(:description)
+      expect(page).to have_button("Submit")
+
+      fill_in :description, with: "I love dogs."
       
-  #     click_button "Search"
+      expect(page).to have_current_path("/applications/#{@application_1.id}")
+      redirect_to "/applications/#{@application_1.id}"
 
-  #     expect(page).to have_content(@pet_1.name)
-  #     expect(page).to have_field("Adopt this Pet")
-      
-      
-  #     click_button "Adopt this Pet" 
-      
-  #     expect(page).to have_current_path("/applications/#{@application_1.id}")
-
-  #     expect(page).to have_content(@pet_1.name)
-  #   end
-
-
+      expect(@application_1.status).to eq("Pending")
+      expect(page).to have_content(@pet_1.name)
+      expect(page).to_not have_button("Add Pet")
+    end
   end
 end
 

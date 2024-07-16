@@ -7,7 +7,9 @@ RSpec.describe Application, type: :model do
   describe "validations" do
     it "validates successful validation" do 
       application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "CO", zip: "80303", description: "I is the goodest.")
-      
+      #will set status to "In Progress" if not set when User creates new application(saved)
+      application.save
+
       expect(application).to be_valid
     end
     
@@ -59,6 +61,14 @@ RSpec.describe Application, type: :model do
       expect(application).to_not be_valid
       expect(application.errors.full_messages).to include("Description can't be blank")
     end
+    
+    it "creates all new applications with a status of 'In Progress'" do
+      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "fdsaf")
+      application.save
+      
+      expect(application.status).to eq("In Progress")
+    end
+
   end
   
   describe "full_address" do 
@@ -69,3 +79,4 @@ RSpec.describe Application, type: :model do
     end
   end
 end
+
