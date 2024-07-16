@@ -17,10 +17,17 @@ class Application < ApplicationRecord
     "#{street_address}, #{city}, #{state} #{zip}"
   end
 
+  # Sets status for new applications to "In Progress"
+    # NOTE: Does not work if using `Application.new`
+      # Must use `Application.create!` (to save/persist)
   def set_default_status
     if self.status.nil?
       self.status = "In Progress"
     end
+  end
+
+  def set_status_pending
+    self.status = "Pending"
   end
 end
 

@@ -27,12 +27,25 @@ class ApplicationsController < ApplicationController
     @application.set_default_status
     # save means validations were met
     if @application.save
-      redirect_to "/applications/#{Application.last.id}"
+      redirect_to "/applications/#{@application.id}"
     else
     redirect_to "/applications/new"
     flash[:error] = @application.errors.full_messages.join(", ")
     end
   end
+
+  def update
+    @application = Application.find(params[:id])
+    if @application.update(application_params)
+      @application.set_status_pending
+      @application.save
+      redirect_to "/applications/#{@application.id}", notice: 'Application was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+
 
   private
   #strong params
