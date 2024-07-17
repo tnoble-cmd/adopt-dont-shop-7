@@ -27,7 +27,7 @@
 
 <div>
     <% if @application.status == "In Progress" && !@application.pets.empty? %>
-    <h2> Desired Pets</h2>
+        <h2> Desired Pets</h2>
         <% @pets.each do |pet| %>
             <p> Click to view: <%= link_to pet.name, "/pets/#{pet.id}"%></p>
         <% end %>

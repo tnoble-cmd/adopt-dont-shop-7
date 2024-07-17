@@ -5,6 +5,15 @@ class Shelter < ApplicationRecord
 
   has_many :pets, dependent: :destroy
 
+  # Not 100% about this but I think this is how we need to get to applications
+  has_many :pet_applications, through: :pets
+  has_many :applications, through: :pet_applications
+
+  # Call this from the '/admin/shelters' View page
+  def self.shelters_with_pending_apps
+    joins(pets: :applications).where(applications: { status: 'Pending' }).distinct
+  end
+
   def self.order_by_recently_created
     order(created_at: :desc)
   end

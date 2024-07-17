@@ -11,7 +11,7 @@
 
 require "rails_helper"
 
-RSpec.describe "User Story #1 - Application Show Page", type: :feature do
+RSpec.describe "Application Show Page", type: :feature do
   before :each do
     @application_1 = Application.create!(applicant_name: "Tyler Noble", street_address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.", status: "In Progress")
     @application_2 = Application.create!(applicant_name: "Lito Croy", street_address: "456 Elm St", city: "Albuquerque", state: "NM", zip: "87108", description: "Me like dogs mucho.", status: "In Progress")
@@ -25,6 +25,7 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
     @pet_2 = @shelter_1.pets.create!(name: "Appa", breed: "Catdog", age: 7, adoptable: true)
     @pet_3 = @shelter_2.pets.create!(name: "Qira", breed: "German Shephard", age: 2, adoptable: true)
     @pet_4 = @shelter_2.pets.create!(name: "Auzzie", breed: "Shitzu", age: 4, adoptable: false)
+    @pet_5 = @shelter_2.pets.create!(name: "August", breed: "Cerebus", age: 3489, adoptable: true)
     
     
     # We definitely need these for the 3rd `it` block test, right?
@@ -180,26 +181,61 @@ RSpec.describe "User Story #1 - Application Show Page", type: :feature do
 
   describe "User Story #6 - Application Submission" do
     it "shows a section to submit my application with 1 or more pet" do 
-  
+
       fill_in :search, with: @pet_1.name
-      click_button "Search" # Do we need to rename this button `Search`?  We might have two named 'Submit'.
+      click_button "Submit"
       first(:button, "Add Pet").click
 
+      expect(page).to have_content(@pet_1.name)
       expect(page).to have_field(:description)
       expect(page).to have_button("Submit")
 
       fill_in :description, with: "I love dogs."
       
+      click_button "Submit Application"
       expect(page).to have_current_path("/applications/#{@application_1.id}")
-      redirect_to "/applications/#{@application_1.id}"
-
+      
+      @application_1.reload
       expect(@application_1.status).to eq("Pending")
       expect(page).to have_content(@pet_1.name)
       expect(page).to_not have_button("Add Pet")
     end
   end
-end
+  
+  describe "User Story #7 - No Pets on an Application" do 
+    it "does not show a section to submit my application" do
+      application_without_pets = Application.create!(applicant_name: "John Doe", street_address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "d")
+      visit "/applications/#{application_without_pets.id}"
 
+      expect(page).to_not have_field(:description)
+      expect(page).to_not have_button("Submit Application")
+    end
+  end
+
+  describe "User Story #8 - Partial Matches for Pet Names" do 
+    it "returns pets searched for with partial search inputs" do
+    
+      fill_in :search, with: "Au"
+      click_button "Submit"
+
+      expect(page).to have_content("Auzzie")
+      expect(page).to have_content("August")
+    end
+  end
+  
+  describe "User Story #9 - Case Insenstive Matches for Pet Names" do 
+    it "returns pets searched for regardless of text case" do
+    
+      fill_in :search, with: "bIchO"
+      click_button "Submit"
+
+      expect(page).to have_content("Bicho")
+      # Or
+      # These should both work
+      expect(page).to have_content(@pet_1.name)
+    end
+  end
+end
 
 
 
