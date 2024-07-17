@@ -47,8 +47,8 @@ RSpec.describe "Admin & Application Approval/Rejection", type: :feature do
         expect(page).to have_content("Lost Friends Shelter")
         
         # Same here if necessary
-        expect("Get Me Outta Here").to appear_before("Glue Factory Adoption Center")
-        expect("Glue Factory Adoption Center").to appear_before("Lost Friends Shelter")
+        expect("Lost Friends Shelter").to appear_before("Glue Factory Adoption Center")
+        expect("Glue Factory Adoption Center").to appear_before("Get Me Outta Here")
       end
     end
   

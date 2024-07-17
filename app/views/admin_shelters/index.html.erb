@@ -1,7 +1,7 @@
 <h1>Admin - Shelters</h1>
 
 <div>
-    <% @shelters.each do |shelter| %>
-    <%= shelter.name %>
+    <% @shelters.reverse_alphabetical_order.each do |shelter| %>
+    <p><%= shelter %></p>
     <% end %>
 </div>

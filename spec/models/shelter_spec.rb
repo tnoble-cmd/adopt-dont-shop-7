@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe Shelter, type: :model do
   describe "relationships" do
     it { should have_many(:pets) }
+    it { should have_many(:pet_applications) }
+    it { should have_many(:applications) }
   end
 
   describe "validations" do
@@ -74,5 +76,8 @@ RSpec.describe Shelter, type: :model do
         expect(Shelter.reverse_alphabetical_order).to eq([@shelter_2.name, @shelter_3.name, @shelter_1.name])
       end
     end
+
+    # describe "" do 
+    #   it "only returns shelters with pending applications"
   end
 end
