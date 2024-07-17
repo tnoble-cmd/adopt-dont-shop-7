@@ -14,6 +14,10 @@ class Shelter < ApplicationRecord
     joins(pets: :applications).where(applications: { status: 'Pending' }).distinct
   end
 
+  def self.reverse_alphabetical_order
+    find_by_sql("SELECT name FROM shelters ORDER BY name DESC").pluck(:name)
+  end
+
   def self.order_by_recently_created
     order(created_at: :desc)
   end

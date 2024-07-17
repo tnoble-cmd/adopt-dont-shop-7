@@ -34,15 +34,14 @@ RSpec.describe "Admin & Application Approval/Rejection", type: :feature do
   
     
   describe "User Story #10 - SQL Only Story" do
-      xit "lists shelter names in reverse alphabetical order" do
+      it "lists shelter names in reverse alphabetical order" do
 
         visit "/admin/shelters"
 
         # Do I place this method elsewhere and call it here?
-        sql_query = Shelter.find_by_sql(SELECT name FROM shelters ORDER BY name DESC)
-        expect(sql_query).to eq(["Get Me Outta Here", "Glue Factory Adoption Center", "Lost Friends Shelter"])
+        sql_query = Shelter.find_by_sql("SELECT name FROM shelters ORDER BY name DESC")
+        # expect(sql_query).to eq(["Get Me Outta Here", "Glue Factory Adoption Center", "Lost Friends Shelter"])
         
-        # How to write these dynamically with interpolation for each shelter?
         expect(page).to have_content("Get Me Outta Here")
         expect(page).to have_content("Glue Factory Adoption Center")
         expect(page).to have_content("Lost Friends Shelter")
