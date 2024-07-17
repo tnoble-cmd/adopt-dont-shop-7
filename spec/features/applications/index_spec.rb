@@ -4,6 +4,7 @@ RSpec.feature 'Applications (search) index page' do
   before :each do
     @application_1 = Application.create!(applicant_name: "Tyler Noble", street_address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.", status: "In Progress")
     @application_2 = Application.create!(applicant_name: "Lito Croy", street_address: "456 Elm St", city: "Albuquerque", state: "NM", zip: "87108", description: "Me like dogs mucho.", status: "In Progress")
+    @application_3 = Application.create!(applicant_name: "Gary Busey", street_address: "666 Elm St", city: "Detroit", state: "MI", zip: "20983", description: "Turtles call me daddy.", status: "In Progress")
     
     
     @shelter_1 = Shelter.create!(name: "Get Me Outta Here", foster_program: true, city: "Denver", rank: 12)
@@ -53,6 +54,56 @@ RSpec.feature 'Applications (search) index page' do
 
       expect(current_path).to eq("/applications/#{@application_1.id}")
       expect(page).to have_content(@pet_3.name)
+    end
+
+    it "types a pet that is not in the Pets Table" do
+      visit "/applications/#{@application_1.id}"
+      
+      fill_in "search", with: "Gojira"
+      click_button "Submit"
+      
+      expect(page).to_not have_content(@pet_1.name)
+      expect(page).to_not have_content(@pet_2.name)
+      expect(page).to_not have_content(@pet_3.name)
+      expect(page).to_not have_content(@pet_4.name)
+      
+      expect(page).to_not have_button("Add Pet")
+      expect(current_path).to eq("/applications")
+
+      expect(page).to_not have_content(@pet_1.name)
+      expect(page).to_not have_content(@pet_2.name)
+      expect(page).to_not have_content(@pet_3.name)
+      expect(page).to_not have_content(@pet_4.name)
+    end
+
+
+    it "shows all pets if 'Submit' is hit and search field is blank" do
+        visit "/applications/#{@application_3.id}"
+        
+        @application_1.reload
+        expect(page).to_not have_content(@pet_1.name)
+        expect(page).to_not have_content(@pet_2.name)
+        expect(page).to_not have_content(@pet_3.name)
+        expect(page).to_not have_content(@pet_4.name)
+
+        click_button "Submit"
+        expect(current_path).to eq("/applications")
+
+        expect(page).to have_content(@pet_1.name)
+        expect(page).to have_content(@pet_2.name)
+        expect(page).to have_content(@pet_3.name)
+        expect(page).to have_content(@pet_4.name)
+
+        expect(page).to have_button("Add Pet")
+    end
+
+    it "shows a flash message if no pets are found" do
+      visit "/applications/#{@application_1.id}"
+
+      fill_in "search", with: "Gojira"
+      click_button "Submit"
+
+      expect(page).to have_content("No pets found with that name")
     end
   end
 end

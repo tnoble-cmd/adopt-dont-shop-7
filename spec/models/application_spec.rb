@@ -4,71 +4,45 @@ RSpec.describe Application, type: :model do
   it { should have_many(:pets) }
   it { should have_many(:pet_applications) }
   
+  # Update tests to use shoulda-matchers
+
   describe "validations" do
-    it "validates successful validation" do 
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "CO", zip: "80303", description: "I is the goodest.")
-      #will set status to "In Progress" if not set when User creates new application(saved)
-      application.save
+    it { should validate_presence_of(:applicant_name) }
+    it { should validate_presence_of(:street_address) }
+    it { should validate_presence_of(:city) }
+    it { should validate_presence_of(:state) }
+    it { should validate_presence_of(:description) }
+    it { should validate_presence_of(:zip) }
+    it { should validate_numericality_of(:zip) }
 
-      expect(application).to be_valid
-    end
-    
-    it "is invalid without an applicant name" do 
-      application = Application.new(applicant_name: "", street_address: "1234 Main St.", city: "Denver", state: "CO", zip: "80303", description: "I is the goodest.")
-      
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("Applicant name can't be blank")
-    end
-
-    it "is invalid without a street address" do 
-      application = Application.new(applicant_name: "Lito", street_address: "", city: "Denver", state: "CO", zip: "80303", description: "I is the goodest.")
-
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("Street address can't be blank")
-    end
-    
-    it "is invalid without a city" do 
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "", state: "CO", zip: "80303", description: "I is the goodest.")
-      
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("City can't be blank")
-    end
-    
-    it "is invalid without a state" do 
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "", zip: "80303", description: "I is the goodest.")
-      
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("State can't be blank")
-    end
-    
-    it "is invalid without a zip" do 
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "CO", zip: "", description: "I is the goodest.")
-      
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("Zip can't be blank")
+    describe "default status" do
+      it "sets the default status to 'In Progress' if not provided" do
+        application = Application.create(
+          applicant_name: "Lito",
+          street_address: "1234 Main St.",
+          city: "Denver",
+          state: "CO",
+          zip: "80303",
+          description: "I is the goodest."
+        )
+        expect(application.status).to eq('In Progress')
+      end
     end
 
-    it "is not a zip without a number" do 
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "", zip: "A", description: "afdsafdsa")
-      
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("Zip is not a number")
+    describe "valid application" do
+      it "is valid with all required attributes" do
+        application = Application.new(
+          applicant_name: "Lito",
+          street_address: "1234 Main St.",
+          city: "Denver",
+          state: "CO",
+          zip: "80303",
+          description: "I is the goodest."
+        )
+  
+        expect(application).to be_valid
+      end
     end
-    
-    it "is invalid without a description" do 
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "", zip: "80303", description: "")
-      
-      expect(application).to_not be_valid
-      expect(application.errors.full_messages).to include("Description can't be blank")
-    end
-    
-    it "creates all new applications with a status of 'In Progress'" do
-      application = Application.new(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "fdsaf")
-      application.save
-      
-      expect(application.status).to eq("In Progress")
-    end
-
   end
   
   describe "full_address" do 

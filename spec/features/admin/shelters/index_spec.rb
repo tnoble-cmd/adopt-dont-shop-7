@@ -54,13 +54,18 @@ RSpec.describe "Admin & Application Approval/Rejection", type: :feature do
   
   # Will need to update Shelter/Application Models to create association
   describe "User Story #11 - Shelters with Pending Applications" do
-    xit "I see a section listing all shelter names with pending applications" do
+    it "I see a section listing all shelter names with pending applications" do
       
 
       # Do we need to visit the page to utilize an AR query?
       visit "/admin/shelters"
+      expect(page).to have_content("Shelters with Pending Applications")
       
-      expect(@shelters_with_pending_apps.name).to eq(["Glue Factory Adoption Center", "Lost Friends Shelter"])
+      within('div', text: "Shelters with Pending Applications") do 
+        expect(page).to have_content('Get Me Outta Here')
+        expect(page).to have_content('Glue Factory Adoption Center')
+
+      end
     end
   end
 end

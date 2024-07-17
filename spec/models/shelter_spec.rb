@@ -15,6 +15,10 @@ RSpec.describe Shelter, type: :model do
   end
 
   before(:each) do
+    @application_1 = Application.create!(applicant_name: "Tyler Noble", street_address: "123 Main St", city: "Denver", state: "CO", zip: "80202", description: "I basically AM a dog.", status: "Pending")
+    @application_2 = Application.create!(applicant_name: "Lito Croy", street_address: "456 Elm St", city: "Albuquerque", state: "NM", zip: "87108", description: "Me like dogs mucho.", status: "In Progress")
+    @application_3 = Application.create!(applicant_name: "Gary Busey", street_address: "666 Pie Hole Dr", city: "Merika Town", state: "HI", zip: "44322", description: "I'm the king of the forest.", status: "Pending")
+
     @shelter_1 = Shelter.create(name: "Aurora shelter", city: "Aurora, CO", foster_program: false, rank: 9)
     @shelter_2 = Shelter.create(name: "RGV animal shelter", city: "Harlingen, TX", foster_program: false, rank: 5)
     @shelter_3 = Shelter.create(name: "Fancy pets of Colorado", city: "Denver, CO", foster_program: true, rank: 10)
@@ -23,6 +27,10 @@ RSpec.describe Shelter, type: :model do
     @pet_2 = @shelter_1.pets.create(name: "Clawdia", breed: "shorthair", age: 3, adoptable: true)
     @pet_3 = @shelter_3.pets.create(name: "Lucille Bald", breed: "sphynx", age: 8, adoptable: true)
     @pet_4 = @shelter_1.pets.create(name: "Ann", breed: "ragdoll", age: 5, adoptable: true)
+
+    PetApplication.create!(pet: @pet_1, application: @application_1)
+    PetApplication.create!(pet: @pet_2, application: @application_2)
+    PetApplication.create!(pet: @pet_3, application: @application_3)
   end
 
   describe "class methods" do
@@ -70,14 +78,20 @@ RSpec.describe Shelter, type: :model do
       end
     end
 
-    # added test for US#10 method in model
-    describe 'reverse_alphabetical_order' do
-      it 'returns shelters in reverse alphabetical order' do
+    describe "reverse_alphabetical_order" do
+      it "returns shelters in reverse alphabetical order" do
         expect(Shelter.reverse_alphabetical_order).to eq([@shelter_2.name, @shelter_3.name, @shelter_1.name])
       end
     end
 
-    # describe "" do 
-    #   it "only returns shelters with pending applications"
+    describe "shelters_with_pending_apps" do 
+      it "returns shelters with pending applications" do
+        result = Shelter.shelters_with_pending_apps
+  
+        expect(result).to include(@shelter_1)
+        expect(result).to include(@shelter_3)
+        expect(result).to_not include(@shelter_2)
+      end
+    end
   end
 end

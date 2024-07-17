@@ -10,10 +10,11 @@ class ApplicationsController < ApplicationController
     @application = Application.find(params[:application_id])
     if params[:search]
       @pets = Pet.where("name ILIKE ?", "%#{params[:search]}%")
-    elsif params[:pet_id]
-      pet = Pet.find(params[:pet_id])
-      @application.pets << pet
-      redirect_to "/applications/#{@application.id}"
+      if @pets.empty?
+        flash[:error] = "No pets found with that name"
+      end
+    else
+      @pets = Pet.all
     end
   end
 
