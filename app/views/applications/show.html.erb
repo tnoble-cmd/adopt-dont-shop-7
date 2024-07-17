@@ -10,7 +10,7 @@
 </div>
 
 <div>
-    <% if @application.status == "In Progress" %>   
+    <% if @application.no_display_form %>   
     <h2> Add a Pet to this Application </h2>
         <%= form_with url: "/applications", method: :get, local: true do |form|%>
             <div>
@@ -26,7 +26,7 @@
 
 
 <div>
-    <% if @application.status == "In Progress" && !@application.pets.empty? %>
+    <% if @application.no_display_form_pets %>
         <h2> Desired Pets</h2>
         <% @pets.each do |pet| %>
             <p> Click to view: <%= link_to pet.name, "/pets/#{pet.id}"%></p>

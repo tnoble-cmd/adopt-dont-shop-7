@@ -29,5 +29,15 @@ class Application < ApplicationRecord
   def set_status_pending
     self.status = "Pending"
   end
+
+  def no_display_form
+    self.status == "In Progress"
+  end
+
+  def no_display_form_pets
+    self.status == "In Progress" && !self.pets.empty?
+  end
+
+  #@application.status == "In Progress"
 end
 
