@@ -70,6 +70,14 @@ RSpec.describe Application, type: :model do
       expect(application.no_display_form_pets).to eq(false)
     end
 
+    describe "set_status_pending" do
+      it "sets the status to 'Pending'" do
+        application = Application.create!(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "description lol")
+        application.set_status_pending
+        expect(application.status).to eq("Pending")
+      end
+    end
+
     it "returns true if status is 'In Progress' == true and there are pets (meaning it will render form)" do 
       application = Application.create!(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "description lol")
       shelter = Shelter.create!(name: "Get Me Outta Here", foster_program: true, city: "Denver", rank: 12)
