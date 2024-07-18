@@ -64,7 +64,6 @@ RSpec.describe "Admin & Application Approval/Rejection", type: :feature do
       within('div', text: "Shelters with Pending Applications") do 
         expect(page).to have_content('Get Me Outta Here')
         expect(page).to have_content('Glue Factory Adoption Center')
-
       end
     end
   end

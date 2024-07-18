@@ -1,0 +1,24 @@
+<h1>Application number: <%= @application.id %> Status: <%= @application.status %> </h1>
+
+
+<h2>Pets</h2>
+<ul>
+  <% @application.pets.each do |pet| %>
+    <li>
+        <%= pet.name %>
+        <% pet_application = @application.pet_applications.find_by(pet_id: pet.id) %>
+        <% if pet_application.status == 'Approved' %>
+            <span>Approved</span>
+        <% elsif pet_application.status == 'Rejected' %>
+            <span>Rejected</span>
+        <% else %>
+        <%= form_with url: "/admin/applications/#{@application.id}", method: :patch, local: true do %>
+            <%= hidden_field_tag :pet_id, pet.id %>
+            <%= submit_tag 'Approve', name: 'approve' %>
+            <%= submit_tag 'Reject', name: 'reject' %>
+            <% end %>
+        <% end %>
+    </li>
+  <% end %>
+</ul>
+

@@ -1,3 +1,11 @@
+# PRESENTATION CHECKLIST
+
+
+
+
+
+
+
 # Adopt, don't Shop
 
 This is a paired project used in Turing School's Backend Program Module 2.
