@@ -81,5 +81,13 @@ RSpec.describe Application, type: :model do
       expect(application.no_display_form_pets).to eq(true)
     end
   end
+
+  describe "set_status_pending" do
+    it "sets the status to 'Pending'" do
+      application = Application.create!(applicant_name: "Lito", street_address: "1234 Main St.", city: "Denver", state: "NM", zip: "80303", description: "description lol")
+      application.set_status_pending
+      expect(application.status).to eq("Pending")
+    end
+  end
 end
 
