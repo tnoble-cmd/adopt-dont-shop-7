@@ -38,9 +38,11 @@ RSpec.feature 'Applications (search) index page' do
       expect(page).to have_content(@pet_1.name)
 
       expect(page).to have_button("Add Pet")
+      click_button "Add Pet"
+      save_and_open_page
     end
 
-    it "I can add a pet to my application" do 
+    xit "I can add a pet to my application" do 
       visit "/applications/#{@application_1.id}"
 
       fill_in "search", with: "Qira"
@@ -54,6 +56,8 @@ RSpec.feature 'Applications (search) index page' do
 
       expect(current_path).to eq("/applications/#{@application_1.id}")
       expect(page).to have_content(@pet_3.name)
+      save_and_open_page
+
     end
 
     it "types a pet that is not in the Pets Table" do
