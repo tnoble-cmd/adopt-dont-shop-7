@@ -13,8 +13,8 @@ Regarding Presentation Feedback
     -
 
 - Select User Stories to Present:
-    - Lito:  User Story #?
-    - Tyler: User Story #?
+    - Lito:  User Story 1?
+    - Tyler: User Story 3?
 
 For each story:
 
